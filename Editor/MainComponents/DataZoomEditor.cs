@@ -38,6 +38,10 @@ namespace XCharts.Editor
             if (m_SupportSlider.boolValue)
             {
                 PropertyField("m_ShowDataShadow");
+                if (baseProperty.FindPropertyRelative("m_ShowDataShadow").boolValue)
+                {
+                    PropertyListField("m_DataShadowSerieIndexes", true);
+                }
                 PropertyField("m_ShowDetail");
                 PropertyField("m_BackgroundColor");
                 PropertyField("m_BorderWidth");
