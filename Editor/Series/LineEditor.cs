@@ -33,6 +33,13 @@ namespace XCharts.Editor
                 PropertyField("m_SampleAverage");
                 PropertyField("m_Ignore");
                 PropertyField("m_IgnoreValue");
+                var m_TooltipCutoffEnable = baseProperty.FindPropertyRelative("m_TooltipCutoffEnable");
+                PropertyField(m_TooltipCutoffEnable);
+                if (m_TooltipCutoffEnable.boolValue)
+                {
+                    PropertyField("m_TooltipCutoffComparison");
+                    PropertyField("m_TooltipCutoffValue");
+                }
                 PropertyField("m_IgnoreLineBreak");
                 PropertyField("m_ShowAsPositiveNumber");
                 PropertyField("m_Large");
