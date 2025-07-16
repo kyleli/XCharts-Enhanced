@@ -224,6 +224,17 @@ namespace XCharts.Runtime
         /// </summary>
         Data
     }
+    /// <summary>
+    /// The comparison type for tooltip value cutoff.
+    /// </summary>
+    public enum TooltipCutoffComparison
+    {
+        EqualTo,
+        LessThan,
+        LessThanOrEqualTo,
+        GreaterThan,
+        GreaterThanOrEqualTo
+    }
 
     /// <summary>
     /// 系列。系列一般由数据和配置组成，用来表示具体的图表图形，如折线图的一条折线，柱图的一组柱子等。一个图表中可以包含多个不同类型的系列。
@@ -289,6 +300,9 @@ namespace XCharts.Runtime
         [SerializeField] private bool m_Clip = false;
         [SerializeField] private bool m_Ignore = false;
         [SerializeField] private double m_IgnoreValue = 0;
+        [SerializeField] private bool m_TooltipCutoffEnable = false;
+        [SerializeField] private TooltipCutoffComparison m_TooltipCutoffComparison = TooltipCutoffComparison.EqualTo;
+        [SerializeField] private double m_TooltipCutoffValue = 0;
         [SerializeField] private bool m_IgnoreLineBreak = false;
         [SerializeField] private bool m_ShowAsPositiveNumber = false;
         [SerializeField] private bool m_Large = true;
@@ -798,6 +812,30 @@ namespace XCharts.Runtime
         {
             get { return m_IgnoreValue; }
             set { if (PropertyUtil.SetStruct(ref m_IgnoreValue, value)) SetVerticesDirty(); }
+        }
+        /// <summary>
+        /// Whether to enable tooltip value cutoff. If true, the series will be hidden from the tooltip if its value meets the specified condition.
+        /// </summary>
+        public bool tooltipCutoffEnable
+        {
+            get { return m_TooltipCutoffEnable; }
+            set { if (PropertyUtil.SetStruct(ref m_TooltipCutoffEnable, value)) SetVerticesDirty(); }
+        }
+        /// <summary>
+        /// The comparison operator for the tooltip cutoff value.
+        /// </summary>
+        public TooltipCutoffComparison tooltipCutoffComparison
+        {
+            get { return m_TooltipCutoffComparison; }
+            set { if (PropertyUtil.SetStruct(ref m_TooltipCutoffComparison, value)) SetVerticesDirty(); }
+        }
+        /// <summary>
+        /// The value to compare against for tooltip cutoff.
+        /// </summary>
+        public double tooltipCutoffValue
+        {
+            get { return m_TooltipCutoffValue; }
+            set { if (PropertyUtil.SetStruct(ref m_TooltipCutoffValue, value)) SetVerticesDirty(); }
         }
         /// <summary>
         /// 忽略数据时折线是断开还是连接。默认false为连接。
