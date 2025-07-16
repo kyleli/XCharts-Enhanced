@@ -356,7 +356,7 @@ namespace XCharts.Runtime
                 if (isTriggerAxis)
                 {
                     var index = serie.context.dataZoomStartIndex + (int)yAxis.context.pointerValue;
-                    if(serie.useSortData) index = yAxis.context.sortedDataIndices[index];
+                    if (serie.useSortData) index = yAxis.context.sortedDataIndices[index];
                     serie.context.pointerEnter = true;
                     serie.context.pointerAxisDataIndexs.Add(index);
                     serie.context.pointerItemDataIndex = index;
@@ -376,7 +376,7 @@ namespace XCharts.Runtime
                 if (isTriggerAxis)
                 {
                     var index = serie.context.dataZoomStartIndex + (int)xAxis.context.pointerValue;
-                    if(serie.useSortData) index = xAxis.context.sortedDataIndices[index];
+                    if (serie.useSortData) index = xAxis.context.sortedDataIndices[index];
                     if (chart.isTriggerOnClick)
                     {
                         if (serie.insertDataToHead)
@@ -606,6 +606,45 @@ namespace XCharts.Runtime
                 var serie = series[i];
                 if (!serie.show) continue;
                 if (isTriggerByItem && serie.context.pointerItemDataIndex < 0) continue;
+                if (serie.tooltipCutoffEnable)
+                {
+                    int currentIndex = isTriggerByAxis ? dataIndex : serie.context.pointerItemDataIndex;
+                    if (currentIndex >= 0)
+                    {
+                        // Dimension 1 is typically the Y-value for Line/Bar charts.
+                        double pointValue = serie.GetData(currentIndex, 1);
+                        bool shouldCutoff = false;
+
+                        switch (serie.tooltipCutoffComparison)
+                        {
+                            case TooltipCutoffComparison.EqualTo:
+                                if (Mathf.Approximately((float)pointValue, (float)serie.tooltipCutoffValue))
+                                    shouldCutoff = true;
+                                break;
+                            case TooltipCutoffComparison.LessThan:
+                                if (pointValue < serie.tooltipCutoffValue)
+                                    shouldCutoff = true;
+                                break;
+                            case TooltipCutoffComparison.LessThanOrEqualTo:
+                                if (pointValue <= serie.tooltipCutoffValue)
+                                    shouldCutoff = true;
+                                break;
+                            case TooltipCutoffComparison.GreaterThan:
+                                if (pointValue > serie.tooltipCutoffValue)
+                                    shouldCutoff = true;
+                                break;
+                            case TooltipCutoffComparison.GreaterThanOrEqualTo:
+                                if (pointValue >= serie.tooltipCutoffValue)
+                                    shouldCutoff = true;
+                                break;
+                        }
+
+                        if (shouldCutoff)
+                        {
+                            continue;
+                        }
+                    }
+                }
                 triggerSerieCount++;
                 serie.context.isTriggerByAxis = isTriggerByAxis;
                 if (isTriggerByAxis && dataIndex >= 0 && serie.context.pointerItemDataIndex < 0)
