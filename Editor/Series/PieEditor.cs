@@ -21,6 +21,13 @@ namespace XCharts.Editor
                 PropertyField("m_RoundCap");
                 PropertyField("m_Ignore");
                 PropertyField("m_IgnoreValue");
+                var m_TooltipCutoffEnable = baseProperty.FindPropertyRelative("m_TooltipCutoffEnable");
+                PropertyField(m_TooltipCutoffEnable);
+                if (m_TooltipCutoffEnable.boolValue)
+                {
+                    PropertyField("m_TooltipCutoffComparison");
+                    PropertyField("m_TooltipCutoffValue");
+                }
                 PropertyField("m_ClickOffset");
                 PropertyField("m_RadiusGradient");
                 PropertyField("m_MinShowLabel");
