@@ -67,6 +67,7 @@ namespace XCharts.Runtime
         [SerializeField] private bool m_SupportSlider;
         [SerializeField] private bool m_SupportMarquee;
         [SerializeField] private bool m_ShowDataShadow;
+        [SerializeField] private List<int> m_DataShadowSerieIndexes = new List<int>() { 0 };
         [SerializeField] private bool m_ShowDetail;
         [SerializeField] private bool m_ZoomLock;
         //[SerializeField] private bool m_Realtime;
@@ -186,6 +187,11 @@ namespace XCharts.Runtime
         {
             get { return m_ShowDataShadow; }
             set { if (PropertyUtil.SetStruct(ref m_ShowDataShadow, value)) SetVerticesDirty(); }
+        }
+        public List<int> dataShadowSerieIndexes
+        {
+            get { return m_DataShadowSerieIndexes; }
+            set { if (PropertyUtil.SetClass(ref m_DataShadowSerieIndexes, value)) SetVerticesDirty(); }
         }
         /// <summary>
         /// Whether to show detail, that is, show the detailed data information when dragging.
