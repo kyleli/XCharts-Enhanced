@@ -527,17 +527,22 @@ namespace XCharts.Runtime
             var centerPos = new Vector3(dataZoom.context.x + dataZoom.context.width / 2,
                 dataZoom.context.y + dataZoom.context.height / 2);
             UGL.DrawBorder(vh, centerPos, dataZoom.context.width, dataZoom.context.height, borderWidth, borderColor);
-            if (dataZoom.showDataShadow && chart.series.Count > 0)
+            foreach (var serieIndex in dataZoom.dataShadowSerieIndexes)
             {
-                Serie serie = chart.series[0];
-                Axis axis = chart.GetChartComponent<YAxis>(0);
+                // Safety checks for each index
+                if (serieIndex < 0 || serieIndex >= chart.series.Count) continue;
+
+                Serie serie = chart.series[serieIndex];
+                Axis axis = chart.GetChartComponent<YAxis>(serie.yAxisIndex);
+                if (axis == null) continue;
+
                 var showData = serie.GetDataList(null);
                 float scaleWid = dataZoom.context.width / (showData.Count - 1);
                 Vector3 lp = Vector3.zero;
                 Vector3 np = Vector3.zero;
                 double minValue = 0;
                 double maxValue = 0;
-                SeriesHelper.GetYMinMaxValue(chart, 0, axis.inverse, out minValue, out maxValue, false, false);
+                SeriesHelper.GetYMinMaxValue(chart, serie.yAxisIndex, axis.inverse, out minValue, out maxValue, false, false);
                 AxisHelper.AdjustMinMaxValue(axis, ref minValue, ref maxValue, true);
 
                 int rate = 1;
@@ -555,6 +560,7 @@ namespace XCharts.Runtime
                 var dataAddDuration = serie.animation.GetAdditionDuration();
                 var unscaledTime = serie.animation.unscaledTime;
 
+                // This is the core drawing loop, now inside our foreach
                 for (int i = 0; i < maxCount; i += rate)
                 {
                     double value = DataHelper.SampleValue(ref showData, serie.sampleType, rate, serie.minShow, maxCount, totalAverage, i,
